@@ -22,6 +22,6 @@ recognition.onresult = function(event) {
           });
       }
     }
-    console.info(`You said : ${event.results[i][0].transcript}`);
+    console.log(`You said : ${event.results[i][0].transcript}`);
   }
 };
