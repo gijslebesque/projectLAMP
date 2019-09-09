@@ -5,6 +5,8 @@ recognition.lang = "en-US";
 recognition.continuous = true;
 recognition.start();
 
+console.log("hi");
+
 recognition.onresult = function(event) {
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
@@ -21,7 +23,7 @@ recognition.onresult = function(event) {
             document.write("I agree");
           });
       }
+      console.log(`You said : ${event.results[i][0].transcript}`);
     }
-    console.log(`You said : ${event.results[i][0].transcript}`);
   }
 };
