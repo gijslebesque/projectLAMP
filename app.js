@@ -33,6 +33,7 @@ Object.keys(ifaces).forEach(function(ifname) {
 
 const Gpio = require("onoff").Gpio; //include onoff to interact with the GPIO
 const LED = new Gpio(1, "out"); //use GPIO pin 4, and specify that it is output
+LED.unexport(); // Unexport GPIO to free resources
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
