@@ -62,4 +62,5 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+app.listen(3000, "192.168.2.146");
+// module.exports = app;
