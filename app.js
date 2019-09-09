@@ -4,9 +4,31 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
-// const os = require("os");
-// const ipAddress = os.networkInterfaces();
+var os = require("os");
+var ifaces = os.networkInterfaces();
+let ipAdress;
 
+Object.keys(ifaces).forEach(function(ifname) {
+  var alias = 0;
+
+  ifaces[ifname].forEach(function(iface) {
+    if ("IPv4" !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+
+    if (alias >= 1) {
+      // this single interface has multiple ipv4 addresses
+      console.log(ifname + ":" + alias, iface.address);
+      ipAdress = iface.address;
+    } else {
+      // this interface has only one ipv4 adress
+      console.log(ifname, iface.address);
+      ipAdress = iface.address;
+    }
+    ++alias;
+  });
+});
 // console.log("LOCALNETWORK", ipAddress);
 
 const Gpio = require("onoff").Gpio; //include onoff to interact with the GPIO
@@ -62,5 +84,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-app.listen(3000, "192.168.2.146");
+app.listen(3001, ipAdress, () => {
+  console.log("running on: 3001", ipAdress);
+});
 // module.exports = app;
