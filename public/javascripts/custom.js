@@ -8,6 +8,7 @@ recognition.start();
 console.log("hi");
 
 recognition.onresult = function(event) {
+  console.log(event);
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
       if (
