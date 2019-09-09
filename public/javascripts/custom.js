@@ -26,7 +26,7 @@ recognition.onresult = function(event) {
             message: "Go"
           })
           .then(result => {
-            recognition.start();
+            // recognition.start();
 
             console.log("Success");
           });
