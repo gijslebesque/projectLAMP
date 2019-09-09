@@ -33,8 +33,18 @@ Object.keys(ifaces).forEach(function(ifname) {
 
 const Gpio = require("onoff").Gpio; //include onoff to interact with the GPIO
 const LED = new Gpio(1, "out"); //use GPIO pin 4, and specify that it is output
-LED.unexport(); // Unexport GPIO to free resources
-blinkLED();
+
+const blinkLED = () => {
+  //function to start blinking
+  if (LED.readSync() === 0) {
+    //check the pin state, if the state is 0 (or off)
+    LED.writeSync(1); //set pin state to 1 (turn LED on)
+  } else {
+    LED.writeSync(0); //set pin state to 0 (turn LED off)
+  }
+};
+
+// blinkLED();
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -53,16 +63,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-
-const blinkLED = () => {
-  //function to start blinking
-  if (LED.readSync() === 0) {
-    //check the pin state, if the state is 0 (or off)
-    LED.writeSync(1); //set pin state to 1 (turn LED on)
-  } else {
-    LED.writeSync(0); //set pin state to 0 (turn LED off)
-  }
-};
 
 app.post("/postMessage", (req, res) => {
   debugger;
@@ -90,4 +90,26 @@ console.log(ipAdress);
 // app.listen(3001, ipAdress, () => {
 //   console.log("running on: 3001", ipAdress);
 // });
+
+process.stdin.resume(); //so the program will not close instantly
+
+function exitHandler(options, exitCode) {
+  LED.unexport(); // Unexport GPIO to free resources
+  if (options.cleanup) console.log("clean");
+  if (exitCode || exitCode === 0) console.log(exitCode);
+  if (options.exit) process.exit();
+}
+
+//do something when app is closing
+process.on("exit", exitHandler.bind(null, { cleanup: true }));
+
+//catches ctrl+c event
+process.on("SIGINT", exitHandler.bind(null, { exit: true }));
+
+// catches "kill pid" (for example: nodemon restart)
+process.on("SIGUSR1", exitHandler.bind(null, { exit: true }));
+process.on("SIGUSR2", exitHandler.bind(null, { exit: true }));
+
+//catches uncaught exceptions
+process.on("uncaughtException", exitHandler.bind(null, { exit: true }));
 module.exports = app;
