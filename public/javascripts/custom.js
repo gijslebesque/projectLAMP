@@ -5,6 +5,10 @@ recognition.lang = "en-US";
 recognition.continuous = true;
 recognition.start();
 
+recognition.onerror = function(event) {
+  console.log(event.error);
+};
+
 console.log("hi");
 
 recognition.onresult = function(event) {

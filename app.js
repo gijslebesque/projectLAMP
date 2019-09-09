@@ -84,7 +84,8 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-app.listen(3001, ipAdress, () => {
-  console.log("running on: 3001", ipAdress);
-});
-// module.exports = app;
+console.log(ipAdress);
+// app.listen(3001, ipAdress, () => {
+//   console.log("running on: 3001", ipAdress);
+// });
+module.exports = app;
