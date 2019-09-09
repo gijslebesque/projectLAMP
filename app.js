@@ -32,7 +32,7 @@ Object.keys(ifaces).forEach(function(ifname) {
 // console.log("LOCALNETWORK", ipAddress);
 
 const Gpio = require("onoff").Gpio; //include onoff to interact with the GPIO
-const LED = new Gpio(1, "out"); //use GPIO pin 4, and specify that it is output
+const LED = new Gpio(2, "out"); //use GPIO pin 4, and specify that it is output
 
 const blinkLED = () => {
   //function to start blinking
@@ -44,7 +44,10 @@ const blinkLED = () => {
   }
 };
 
-// blinkLED();
+
+//LED.unexport();
+//LED.writeSync(1)
+//blinkLED();
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -112,4 +115,10 @@ process.on("SIGUSR2", exitHandler.bind(null, { exit: true }));
 
 //catches uncaught exceptions
 process.on("uncaughtException", exitHandler.bind(null, { exit: true }));
+process.on('SIGINT', () => {
+  LED.unexport();
+  process.exit(0)
+});
+
+
 module.exports = app;
