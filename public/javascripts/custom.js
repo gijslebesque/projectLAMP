@@ -16,10 +16,8 @@ recognition.onresult = function(event) {
   for (var i = event.resultIndex; i < event.results.length; ++i) {
     if (event.results[i].isFinal) {
       if (
-        event.results[i][0].transcript.trim() == "james' is a dick" ||
-        event.results[i][0].transcript.trim() == "light on" ||
-        event.results[i][0].transcript.trim() == "light of" ||
-        event.results[i][0].transcript.trim() == "light off"
+        event.results[i][0].transcript.trim() == "light off" ||
+        event.results[i][0].transcript.toLowerCase().includes("james")
       ) {
         axios
           .post("/postMessage", {
